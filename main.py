@@ -5,13 +5,20 @@ from resetpw import send_password_reset
 from connect import ssh_connect
 from cheat import cheat_sheet
 from org import get_org_details, get_org_details_short
+from updater import check_for_update_notification, perform_update
 
 
 VALID_BRANDS = "fastname", "syse", "proisp", "uniweb"
 
 @click.group()
 def cli():
-    pass
+    check_for_update_notification()
+
+
+@cli.command()
+def update():
+    """Download and install the latest version."""
+    perform_update()
 
 
 @cli.command()

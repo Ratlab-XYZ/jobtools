@@ -31,5 +31,5 @@ jobs:
       - name: Upload Compiled Binary
         uses: actions/upload-artifact@v4
         with:
-          name: my-binary
+          name: uw
           path: dist/uw  # Adjust path based on Nuitka output

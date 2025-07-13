@@ -1,17 +1,13 @@
-name: Build and Package with Nuitka
+name: Manual Build and Release with Nuitka
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - '**/*.py'
-  pull_request:
-    branches: [ main ]
-    paths:
-      - '**/*.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write  # Required to create tags and releases
 
 jobs:
-  build:
+  build-release:
     runs-on: self-hosted
 
     steps:
@@ -32,8 +28,24 @@ jobs:
         run: |
           nuitka --standalone --onefile --output-dir=dist --output-filename=uw main.py 
 
-      - name: Upload Compiled Binary
-        uses: actions/upload-artifact@v4
+      - name: Get latest tag
+        id: get_tag
+        run: |
+          TAG=$(git describe --tags --abbrev=0 || echo v0.0.0)
+          echo "CURRENT_TAG=$TAG" >> $GITHUB_ENV
+
+      - name: Bump version and create new tag
+        run: |
+          OLD_TAG=${{ env.CURRENT_TAG }}
+          VERSION=$(echo $OLD_TAG | awk -F. -v OFS=. '{$NF += 1 ; print}')
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git tag $VERSION
+          git push origin $VERSION
+          echo "NEW_VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: uw
-          path: dist/uw  # Adjust path based on Nuitka output
+          tag_name: ${{ env.NEW_VERSION }}
+          files: dist/uw

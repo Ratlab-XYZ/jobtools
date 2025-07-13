@@ -4,8 +4,7 @@ from check_helper import extract_domain, query_dns, resolve_mx_ips
 from resetpw import send_password_reset
 from connect import ssh_connect
 from cheat import cheat_sheet
-from org import get_org_details
-from ehf import get_ehf
+from org import get_org_details, get_org_details_short
 
 
 VALID_BRANDS = "fastname", "syse", "proisp", "uniweb"
@@ -41,7 +40,7 @@ def ehf(org_number):
 
     uw ehf [ORG_NUMBER]
     """
-    get_ehf(org_number)
+    get_org_details_short(org_number)
 
 @cli.command()
 @click.argument('email')

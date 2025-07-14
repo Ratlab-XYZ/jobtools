@@ -72,7 +72,7 @@ jobs:
         run: |
           docker run --rm -v ${{ github.workspace }}:/app -w /app python:3.12-bullseye bash -c "
             apt-get update &&
-            apt-get install -y gcc g++ libffi-dev python3-dev &&
+            apt-get install -y gcc g++ libffi-dev python3-dev patchelf &&
             pip install --upgrade pip &&
             pip install nuitka &&
             nuitka --standalone --onefile --output-dir=dist --output-filename=uw main.py

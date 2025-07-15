@@ -95,6 +95,9 @@ def cheat(search_word):
 @cli.command()
 @click.argument("org_number")
 def org(org_number):
+   """
+   Get org details
+   """
    get_org_details(org_number)
 
 

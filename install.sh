@@ -19,7 +19,11 @@ echo "Installing $BIN_NAME from latest $REPO release..."
 
 mkdir -p "$INSTALL_DIR"
 
-URL=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" | jq -r '.assets[] | select(.name | test("'"$BIN_NAME"'")) | .browser_download_url')
+URL=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" |
+  grep "browser_download_url" |
+  grep "$BIN_NAME" |
+  head -n1 |
+  cut -d '"' -f 4)
 
 if [ -z "$URL" ]; then
   echo "Error: Could not find the download URL for $BIN_NAME in the latest release."

@@ -5,3 +5,7 @@ default:
 	--include-module=dns \
 	--include-module=email \
 	--lto=no -j 8 --output-filename=uw main.py
+
+pyinstaller:
+	pyinstaller --onefile --clean --name=mytool --workpath=./build-pyinstaller --distpath=./build-pyinstaller/bin main.py
+	rm -rf build *.spec

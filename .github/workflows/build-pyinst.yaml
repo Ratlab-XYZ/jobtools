@@ -1,4 +1,4 @@
-name: Build with Nuitka in Docker
+name: Build with pyinstaller in Docker
 
 on:
   workflow_dispatch:

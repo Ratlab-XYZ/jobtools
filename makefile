@@ -7,5 +7,5 @@ default:
 	--lto=no -j 8 --output-filename=uw main.py
 
 pyinstaller:
-	pyinstaller --onefile --clean --name=mytool --workpath=./build-pyinstaller --distpath=./build-pyinstaller/bin main.py
+	pyinstaller --onefile --clean --name=uw --workpath=./build-pyinstaller --distpath=./build-pyinstaller/bin main.py
 	rm -rf build *.spec

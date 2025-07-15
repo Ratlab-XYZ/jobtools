@@ -1,9 +1,8 @@
-import requests
+import shutil
 import sys
 import os
-import shutil
-import subprocess
 import tempfile
+import requests
 import click
 
 REPO = "Ratlab-xyz/jobtools"  # Change this to your actual repo
@@ -35,16 +34,19 @@ def update_binary(download_url):
         with open(temp_path, "wb") as f:
             shutil.copyfileobj(r.raw, f)
 
-    current_path = sys.argv[0]
+    # Use shutil.which() instead of sys.argv[0]
+    current_path = shutil.which(sys.argv[0])
+    if not current_path:
+        click.echo("Error: Could not determine current binary path.")
+        sys.exit(1)
+
     backup_path = current_path + ".bak"
 
-    click.echo("Replacing binary...")
+    click.echo(f"Replacing binary at {current_path}...")
     shutil.move(current_path, backup_path)
     shutil.move(temp_path, current_path)
     os.chmod(current_path, 0o755)
 
-    #click.echo("Restarting...")
-    #subprocess.Popen([current_path] + sys.argv[1:])
     sys.exit(0)
 
 def perform_update():

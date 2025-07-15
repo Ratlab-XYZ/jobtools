@@ -7,7 +7,7 @@ import tempfile
 import click
 
 REPO = "Ratlab-xyz/jobtools"  # Change this to your actual repo
-CURRENT_VERSION = "v0.0.1"   # This should be injected during CI build
+CURRENT_VERSION = "v0.0.0"   # This should be injected during CI build
 
 def get_latest_release_info():
     url = f"https://api.github.com/repos/{REPO}/releases/latest"
@@ -43,8 +43,8 @@ def update_binary(download_url):
     shutil.move(temp_path, current_path)
     os.chmod(current_path, 0o755)
 
-    click.echo("Restarting...")
-    subprocess.Popen([current_path] + sys.argv[1:])
+    #click.echo("Restarting...")
+    #subprocess.Popen([current_path] + sys.argv[1:])
     sys.exit(0)
 
 def perform_update():

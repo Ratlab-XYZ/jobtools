@@ -10,7 +10,7 @@ def get_ehf(org_number):
     falling back to Peppol if necessary.
     """
     tunnel_url = f"https://elma.tunnel.ratlab.xyz/{org_number}"
-    peppol_url = f"https://directory.peppol.eu/public/locale-en_US/menuitem-search?q={org_number}"
+    peppol_url = f"https://directory.peppol.eu/search/1.0/json?q={org_number}"
 
     # Try elma.tunnel.ratlab.xyz first
     try:
@@ -31,19 +31,21 @@ def get_ehf(org_number):
         # On any error (HTTP, JSON parsing, missing keys), fallback to Peppol
         click.echo("Fallback to Peppol directory...")
 
-    # Fallback to Peppol
+    # Fallback to Peppol JSON endpoint
     try:
-        response = requests.get(peppol_url, timeout=5)
-        response.raise_for_status()
+        response = requests.get(peppol_url, timeout=10)
+        peppol_data = response.json()
     except requests.RequestException as e:
         click.echo(f"Failed to fetch data from Peppol: {e}")
         raise SystemExit(1)
 
-    html = response.text
-    if "Found 1 entity matching" in html:
-        return f"{org_number} Can receive EHF (via Peppol)"
+    matches = peppol_data.get("matches", [])
+    if matches:
+        entity_name = matches[0]["entities"][0]["name"][0]["name"] if matches[0].get("entities") else "Ukjent"
+        return {"org_number": org_number, "navn": entity_name, "ehf": True}
     else:
-        return f"{org_number} Can NOT receive EHF (via Peppol)"
+        response = requests.get(f"{URL}{org_number}").json()
+        return {"org_number": org_number, "navn": response.get('navn'), "ehf": False}
 
 
 

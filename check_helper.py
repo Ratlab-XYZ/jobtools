@@ -139,6 +139,9 @@ def query_dns(domain, record_type, nameserver=None):
             f"{color_text(value, value_color)}"
         )
     return answers
+
+
+
 def resolve_mx_ips(domain, nameserver=None):
     resolver = dns.resolver.Resolver()
     if nameserver:

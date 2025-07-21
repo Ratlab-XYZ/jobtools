@@ -9,7 +9,7 @@ def get_ehf(org_number):
     Check EHF status for an organization number using elma.tunnel.ratlab.xyz,
     falling back to Peppol if necessary.
     """
-    tunnel_url = f"https://elma.tunnel.ratlab.xyz/{org_number}"
+    tunnel_url = f"https://elma.ratlab.xyz/{org_number}"
     peppol_url = f"https://directory.peppol.eu/search/1.0/json?q={org_number}"
 
     # Try elma.tunnel.ratlab.xyz first
